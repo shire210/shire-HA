@@ -1,0 +1,3684 @@
+kiosk_mode:
+  mobile_settings:
+    hide_header: true
+views:
+  - theme: Backend-selected
+    title: Home
+    icon: mdi:home
+    path: home
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - square: false
+        columns: 1
+        type: grid
+        cards:
+          - show_name: true
+            name: Security
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: more-info
+            hold_action:
+              action: none
+            entity: sensor.count_of_security_open
+            color_type: card
+            state:
+              - value: 0
+                operator: '>'
+                color: '#eb5050'
+                icon: mdi:alert
+              - value: 0
+                color: '#47ba66'
+                icon: mdi:shield-lock
+            styles:
+              name:
+                - position: absolute
+                - height: 50px
+                - top: 15%
+                - left: 50%
+                - transform: translateX(-50%)
+                - line-height: 35px
+                - font-size: 35px
+                - font-weight: bold
+              icon:
+                - position: absolute
+                - height: 40px
+                - right: '-10%'
+              card:
+                - padding-top: 5px
+                - height: 50px
+                - padding-bottom: 5px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            tap_action:
+              action: navigate
+              navigation_path: locks
+            name: Locks
+            entity: lock.front_door
+            state:
+              - value: locked
+                color: var(--ha-card-background)
+              - value: unlocked
+                color: var(--accent-color)
+              - value: unlocking
+                color: var(--accent-color)
+              - value: locking
+                color: var(--accent-color)
+            styles:
+              card:
+                - height: 75px
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            tap_action:
+              action: navigate
+              navigation_path: garage
+            name: Garages
+            entity: cover.garage_door_opener
+            state:
+              - value: open
+                icon: mdi:garage-open-variant
+                color: var(--accent-color)
+              - value: closed
+                icon: mdi:garage-variant
+                color: var(--ha-card-background)
+              - value: closing
+                color: var(--accent-color)
+                icon: mdi:arrow-down-box
+              - value: opening
+                color: var(--accent-color)
+                icon: mdi:arrow-up-box
+            styles:
+              card:
+                - height: 75px
+          - show_name: true
+            show_icon: true
+            color_type: card
+            type: custom:button-card
+            icon: mdi:window-closed-variant
+            entity: binary_sensor.openings
+            tap_action:
+              action: navigate
+              navigation_path: openings
+            name: Openings
+            styles:
+              card:
+                - height: 75px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Home Status
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 40px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:thermometer
+            size: 60px
+            custom_fields:
+              min_temp: |
+                [[[return `<span> ${states['sensor.min_temp'].state}°</span>`]]]
+              max_temp: >
+                [[[return `<span> ${states['sensor.max_temp'].state}°
+                </span>`]]]
+            styles:
+              icon:
+                - left: 10%
+              card:
+                - height: 75px
+              custom_fields:
+                min_temp:
+                  - position: absolute
+                  - height: 25px
+                  - bottom: 10%
+                  - right: 10%
+                  - line-height: 25px
+                  - font-size: 20px
+                  - font-weight: bold
+                max_temp:
+                  - position: absolute
+                  - height: 25px
+                  - top: 10%
+                  - right: 10%
+                  - line-height: 25px
+                  - font-size: 20px
+                  - font-weight: bold
+            tap_action:
+              action: navigate
+              navigation_path: climate
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:lightbulb-group
+            tap_action:
+              action: navigate
+              navigation_path: lights
+            double_tap_action:
+              action: call-service
+              service: light.toggle
+              service_data:
+                entity_id: light.all_lights
+            entity: sensor.count_of_lights_on
+            size: 60px
+            custom_fields:
+              light_count: |
+                [[[return (states['sensor.count_of_lights_on'].state)]]]
+            styles:
+              icon:
+                - left: 15%
+              card:
+                - height: 75px
+              custom_fields:
+                light_count:
+                  - position: absolute
+                  - top: 50%
+                  - transform: translate(-10%, -50%)
+                  - right: 10%
+                  - height: 25px
+                  - width: 30px
+                  - line-height: 25px
+                  - font-size: 25px
+                  - font-weight: bold
+            color_type: card
+            state:
+              - operator: '>'
+                value: 0
+                color: var(--accent-color)
+              - operator: '=='
+                value: 0
+                color: var(--ha-card-background)
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:fan
+            tap_action:
+              action: navigate
+              navigation_path: fans
+            double_tap_action:
+              action: call-service
+              service: fan.toggle
+              service_data:
+                entity_id: fan.all_fans
+            entity: sensor.count_of_fans_on
+            size: 60px
+            custom_fields:
+              light_count: |
+                [[[return (states['sensor.count_of_fans_on'].state)]]]
+            styles:
+              icon:
+                - left: 15%
+              card:
+                - height: 75px
+              custom_fields:
+                light_count:
+                  - position: absolute
+                  - top: 50%
+                  - transform: translate(-10%, -50%)
+                  - right: 10%
+                  - height: 25px
+                  - width: 30px
+                  - line-height: 25px
+                  - font-size: 25px
+                  - font-weight: bold
+            color_type: card
+            state:
+              - operator: '>'
+                value: 0
+                color: var(--accent-color)
+              - operator: '=='
+                value: 0
+                color: var(--ha-card-background)
+      - type: custom:swipe-card
+        parameters:
+          spaceBetween: 8
+          slidesPerView: 1
+          scrollbar:
+            hide: true
+            draggable: true
+            snapOnRelease: true
+        cards:
+          - type: custom:stack-in-card
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - show_name: false
+                    show_icon: true
+                    type: custom:button-card
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    entity: sensor.plex_shirevision
+                    color_type: icon
+                    state:
+                      - value: 0
+                        operator: '>'
+                        color: '#e5a00d'
+                    custom_fields:
+                      plex_count: |
+                        [[[return (states['sensor.plex_shirevision'].state)]]]
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - left: 15%
+                        - height: 30px
+                      custom_fields:
+                        plex_count:
+                          - position: absolute
+                          - right: 20%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 25px
+                          - font-weight: bold
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:fire
+                    type: custom:button-card
+                    entity: light.desk_lamp
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - height: 30px
+                        - right: 30%
+                    state:
+                      - value: 'on'
+                        color: '#e5a00d'
+                  - show_name: false
+                    show_icon: true
+                    type: custom:button-card
+                    entity: light.tablets
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    custom_fields:
+                      plex_count: >
+                        [[[return
+                        (states['sensor.count_of_tablets_on'].state)]]]
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - left: 15%
+                        - height: 30px
+                      custom_fields:
+                        plex_count:
+                          - position: absolute
+                          - right: 20%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 25px
+                          - font-weight: bold
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:minus-circle
+                    entity: sensor.qbittorrent_status
+                    type: custom:button-card
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    double_tap_action:
+                      action: more-info
+                    state:
+                      - value: downloading
+                        icon: mdi:arrow-down-bold
+                      - value: downloading
+                        icon: mdi:arrow-up-bold
+                      - value: up_down
+                        icon: mdi:arrow-up-down-bold
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - position: absolute
+                        - right: 40%
+                        - height: 30px
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:lightning-bolt
+                    type: custom:button-card
+                    custom_fields:
+                      electricity: >
+                        [[[return
+                        Math.floor(states['sensor.power_sum'].state)]]]
+                      watts: w
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                        - margin-left: '-15%'
+                      icon:
+                        - position: relative
+                        - right: 20%
+                        - height: 30px
+                      custom_fields:
+                        electricity:
+                          - position: absolute
+                          - right: 10%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 22px
+                          - font-weight: bold
+                        watts:
+                          - position: absolute
+                          - font-size: 12px
+                          - right: 0%
+                          - bottom: 10%
+          - type: custom:stack-in-card
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:arrow-down-bold-box
+                    type: custom:button-card
+                    entity: sensor.speedtest_download
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    custom_fields:
+                      down_speed: >
+                        [[[return
+                        Math.floor(states['sensor.speedtest_download'].state)]]]
+                      mbps: Mbps
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - left: 10%
+                        - height: 30px
+                      custom_fields:
+                        down_speed:
+                          - position: absolute
+                          - right: 25%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 25px
+                          - font-weight: bold
+                        mbps:
+                          - position: absolute
+                          - font-size: 12px
+                          - right: 0%
+                          - bottom: 10%
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:arrow-up-bold-box
+                    type: custom:button-card
+                    entity: sensor.speedtest_upload
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    custom_fields:
+                      up_speed: >
+                        [[[return
+                        Math.floor(states['sensor.speedtest_upload'].state)]]]
+                      mbps: Mbps
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - left: 10%
+                        - height: 30px
+                      custom_fields:
+                        up_speed:
+                          - position: absolute
+                          - right: 30%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 25px
+                          - font-weight: bold
+                        mbps:
+                          - position: absolute
+                          - font-size: 12px
+                          - right: 0%
+                          - bottom: 10%
+                  - show_name: false
+                    show_icon: true
+                    icon: mdi:speedometer
+                    type: custom:button-card
+                    entity: sensor.speedtest_ping
+                    tap_action:
+                      action: navigate
+                      navigation_path: status
+                    custom_fields:
+                      plex_count: >
+                        [[[return
+                        Math.floor(states['sensor.speedtest_ping'].state)]]]
+                      mbps: ms
+                    styles:
+                      card:
+                        - height: 45px
+                        - padding: 0px
+                      icon:
+                        - left: 15%
+                        - height: 30px
+                      custom_fields:
+                        plex_count:
+                          - position: absolute
+                          - right: 30%
+                          - top: 50%
+                          - transform: translateY(-50%)
+                          - font-size: 25px
+                          - font-weight: bold
+                        mbps:
+                          - position: absolute
+                          - font-size: 12px
+                          - right: 15%
+                          - bottom: 10%
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Pages
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 40px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            color_type: card
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: television
+            name: TVs
+            icon: mdi:television
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+            state:
+              - operator: template
+                value: |
+                  [[[
+                    return states['switch.roku_tv_status'].state == 'on'
+                    ||
+                    states['switch.shield_tv_status'].state == 'on'
+                  ]]]
+                color: var(--accent-color)
+              - operator: default
+                color: var(--ha-card-background)
+          - show_name: true
+            show_icon: true
+            color_type: card
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: music
+            name: Music
+            icon: mdi:music
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+            entity: media_player.spotify_shire21
+            state:
+              - value: playing
+                color: var(--accent-color)
+              - operator: default
+                color: var(--ha-card-background)
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: shopping
+            name: Shopping
+            icon: mdi:cart
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: cameras
+            name: Cameras
+            icon: mdi:cctv
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: automations
+            name: Automations
+            icon: mdi:robot
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: navigate
+              navigation_path: system
+            name: System
+            icon: mdi:server
+            size: 70px
+            styles:
+              card:
+                - height: 100px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Scenes
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 40px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: custom:swipe-card
+        parameters:
+          spaceBetween: 8
+          slidesPerView: 4
+          scrollbar:
+            hide: true
+            draggable: true
+            snapOnRelease: true
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            styles:
+              card:
+                - height: 70px
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.welcome
+            name: Home
+            icon: ''
+            entity: input_button.welcome
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            styles:
+              card:
+                - height: 70px
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.away
+            icon: ''
+            entity: input_button.away
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            styles:
+              card:
+                - height: 70px
+            entity: input_button.good_morning
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.good_morning
+            name: Morning
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            size: 45px
+            styles:
+              card:
+                - height: 70px
+            entity: input_button.goodnight
+            tap_action:
+              action: call-service
+              service: input_button.press
+              service_data:
+                entity_id: input_button.goodnight
+            name: Night
+  - theme: Backend-selected
+    title: Locks
+    path: locks
+    icon: mdi:lock
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Front Door
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: custom:vertical-stack-in-card
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: lock.front_door
+            size: 100px
+            name: Front Door
+            style: |
+              ha-card.type-button {
+                padding-top: 0px;
+                padding-bottom: 0px;
+              }
+          - type: entity
+            entity: lock.front_door
+            style: |
+              ha-card .header {
+                visibility: hidden;
+                height: 0px;
+              }
+              ha-card {
+                text-align: center;
+                font-weight: bold;
+              }
+              ha-card.type-entity {
+                margin-bottom: -20px;
+              }
+          - show_name: true
+            show_icon: false
+            name: Last Changed
+            type: custom:button-card
+            entity: lock.front_door
+            show_last_changed: true
+            styles:
+              label:
+                - font-size: 30px
+      - type: entities
+        entities:
+          - entity: switch.front_detect
+          - entity: select.front_doorbell_security_light
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Garage
+    path: garage
+    icon: mdi:garage-variant
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Audi Door
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - show_name: false
+        show_icon: true
+        type: custom:button-card
+        tap_action:
+          action: toggle
+        double_tap_action:
+          action: more-info
+        entity: cover.garage_door_opener
+        show_state: true
+        size: 90px
+        styles:
+          card:
+            - padding-top: 0px
+            - padding-bottom: 5px
+          state:
+            - font-size: 30px
+            - font-weight: bold
+      - show_name: true
+        show_icon: false
+        name: Last Changed
+        type: custom:button-card
+        entity: cover.garage_door_opener
+        show_last_changed: true
+        styles:
+          label:
+            - font-size: 30px
+          card:
+            - padding-top: 0px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Challenger Door
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 10px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - show_name: false
+        show_icon: true
+        type: custom:button-card
+        tap_action:
+          action: toggle
+        double_tap_action:
+          action: more-info
+        entity: cover.garage_door_opener
+        show_state: true
+        size: 90px
+        styles:
+          card:
+            - padding-top: 0px
+            - padding-bottom: 5px
+          state:
+            - font-size: 30px
+            - font-weight: bold
+      - show_name: true
+        show_icon: false
+        name: Last Changed
+        type: custom:button-card
+        entity: cover.garage_door_opener
+        show_last_changed: true
+        styles:
+          label:
+            - font-size: 30px
+          card:
+            - padding-top: 0px
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Openings
+    path: openings
+    icon: mdi:window-closed-variant
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Doors
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            size: 50px
+            tap_action:
+              action: toggle
+            entity: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+            name: Front
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            size: 50px
+            tap_action:
+              action: toggle
+            entity: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+            name: Garage
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            size: 50px
+            tap_action:
+              action: toggle
+            entity: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+            name: Patio
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Windows
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            size: 50px
+            tap_action:
+              action: toggle
+            entity: binary_sensor.door_sensor_1
+            name: Dining Room
+            show_state: false
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            color_type: card
+            size: 50px
+            tap_action:
+              action: toggle
+            entity: binary_sensor.door_sensor_1
+            name: Kitchen
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Climate
+    path: climate
+    icon: mdi:temperature-fahrenheit
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Thermostat
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: custom:simple-thermostat
+        entity: climate.ecobee
+        layout:
+          step: row
+          mode:
+            names: true
+            icons: true
+            headings: true
+        header: false
+        control: false
+        setpoints:
+          target_temp_low:
+            hide: false
+        step_size: 1
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Temperature
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.basement_temperature
+                name: Basement
+            align_state: center
+            hours_to_show: 12
+            points_per_hour: 6
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.bedroom_temperature
+                name: Bedroom
+            align_state: center
+            hours_to_show: 12
+            points_per_hour: 6
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.basement_temperature_2
+                name: Office
+            align_state: center
+            hours_to_show: 12
+            points_per_hour: 6
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Humidity
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.lumi_lumi_weather_humidity
+                name: Basement
+            align_state: center
+            hours_to_show: 12
+            points_per_hour: 6
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.bedroom_temp_sensor_humidity
+                name: Bedroom
+            align_state: center
+            hours_to_show: 12
+            points_per_hour: 6
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Outdoors
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - show_current: true
+        show_forecast: true
+        type: weather-forecast
+        entity: weather.openweathermap
+        name: ' Warrington'
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Lights
+    path: lights
+    icon: mdi:lightbulb-group
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Office
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: tile
+            entity: light.desk_lamp
+            name: Ceiling
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.desk_lamp
+            features:
+              - type: light-brightness
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Kitchen
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - features:
+          - type: light-brightness
+        type: tile
+        entity: light.desk_lamp
+        name: Kitchen
+        icon: mdi:countertop
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Bedroom
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: tile
+            entity: light.desk_lamp
+            name: Ceiling
+            features:
+              - type: light-brightness
+          - features:
+              - type: light-brightness
+            type: tile
+            entity: light.desk_lamp
+            name: Nightstand
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Outdoors
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - features:
+              - type: light-brightness
+            type: tile
+            entity: light.desk_lamp
+            name: Front Porch
+          - features:
+              - type: light-brightness
+            type: tile
+            entity: light.desk_lamp
+            name: Rear Deck
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Adaptive Lighting
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: horizontal-stack
+        cards:
+          - show_name: true
+            show_icon: true
+            name: Adapt
+            type: custom:button-card
+            color_type: card
+            tap_action:
+              action: toggle
+            entity: switch.adaptive_lighting_main
+            show_state: false
+            size: 50px
+            styles:
+              card:
+                - width: 223px
+                - height: 70px
+          - show_name: true
+            show_icon: true
+            icon: mdi:palette
+            type: custom:button-card
+            color_type: card
+            tap_action:
+              action: toggle
+            entity: switch.adaptive_lighting_adapt_color_main
+            name: Color
+            show_state: false
+            size: 40px
+          - show_name: true
+            show_icon: true
+            icon: mdi:brightness-percent
+            type: custom:button-card
+            color_type: card
+            tap_action:
+              action: toggle
+            entity: switch.adaptive_lighting_adapt_brightness_main
+            name: Brightness
+            size: 40px
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Fans
+    path: fans
+    icon: mdi:fan
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Office
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: fan.ceiling_fan
+            size: 80px
+            styles:
+              card:
+                - height: 100px
+            state:
+              - value: 'on'
+                spin: true
+          - show_state: true
+            show_icon: false
+            name: Time ON
+            type: custom:button-card
+            entity: sensor.ceiling_fan_on_today
+            styles:
+              state:
+                - font-size: 30px
+              card:
+                - height: 100px
+                - padding-top: 0px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Bedroom
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: fan.ceiling_fan
+            size: 80px
+            styles:
+              card:
+                - height: 100px
+            state:
+              - value: 'on'
+                spin: true
+          - show_state: true
+            show_icon: false
+            name: Time ON
+            type: custom:button-card
+            entity: sensor.ceiling_fan_on_today
+            styles:
+              state:
+                - font-size: 30px
+              card:
+                - height: 100px
+                - padding-top: 0px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Family Room
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: fan.ceiling_fan
+            size: 80px
+            styles:
+              card:
+                - height: 100px
+            state:
+              - value: 'on'
+                spin: true
+          - show_state: true
+            show_icon: false
+            name: Time ON
+            type: custom:button-card
+            entity: sensor.ceiling_fan_on_today
+            styles:
+              state:
+                - font-size: 30px
+              card:
+                - height: 100px
+                - padding-top: 0px
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Detail Status
+    path: status
+    icon: mdi:home-analytics
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        icon: mdi:plex
+        name: Plex
+        custom_fields:
+          plexicon: |
+            [[[ return `<ha-icon
+                  icon="mdi:plex"
+                  style="width: 40px; height: 40px;">
+                  </ha-icon>` ]]]
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+            - position: absolute
+            - left: 45%
+          custom_fields:
+            plexicon:
+              - position: absolute
+              - left: 35%
+              - color: '#e5a00d'
+      - type: horizontal-stack
+        cards:
+          - direction: right
+            entities:
+              - entity: sensor.plex_shirevision
+            height: 40px
+            icon: mdi:plex
+            max: '5'
+            min: '0'
+            tap_action:
+              action: more-info
+            positions:
+              icon: 'off'
+              indicator: outside
+              minmax: 'off'
+              name: 'off'
+              value: inside
+            severity:
+              - color: '#81a1c1'
+                from: '0'
+                to: '0'
+              - color: '#e5a00d'
+                from: '1'
+                to: '3'
+              - color: '#bf3a28'
+                from: '4'
+                to: '10'
+            type: custom:bar-card
+            unit_of_measurement: Watching
+            width: 100%
+            style: |
+              bar-card-value {
+                font-size: 20px;
+                font-weight: bold;
+              }
+              ha-card {
+                height: 70px;
+              }
+          - show_name: true
+            show_icon: false
+            type: custom:button-card
+            entity: input_boolean.plex_detail_helper
+            color_type: card
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.plex_detail_helper
+            name: Details
+            color: '#e5a00d'
+            styles:
+              card:
+                - width: 80px
+                - height: 70px
+              name:
+                - font-size: 20px
+                - font-weight: bold
+      - type: conditional
+        conditions:
+          - entity: input_boolean.plex_detail_helper
+            state: 'on'
+        card:
+          type: glance
+          entities:
+            - entity: sensor.plex_list
+          style:
+            .entities .entity:
+              $: |
+                div:not(.name) {
+                  text-overflow: unset !important;
+                  white-space: unset !important;
+                }
+          show_name: false
+          show_icon: false
+      - type: entity
+        tap_action:
+          action: more-info
+        entity: sensor.tautulli_total_bandwidth
+        name: Stream Bandwidth
+        card_mod:
+          style: |
+            ha-card .header .icon {
+              visibility: hidden;
+            }
+            ha-card {
+              text-align: center;
+            }
+            ha-card .header{
+              justify-content: center;
+            }
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Fireplace
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            color_type: card
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: light.desk_lamp
+            size: 40px
+            name: Flame
+            icon: mdi:fire
+            state:
+              - value: 'on'
+                color: '#9E2900'
+              - value: 'off'
+                color: var(--ha-card-background)
+          - show_name: true
+            show_icon: true
+            color_type: card
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: light.desk_lamp
+            size: 40px
+            name: Fan
+            icon: mdi:fan
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Tablets
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: custom:stack-in-card
+        cards:
+          - type: grid
+            square: false
+            columns: 4
+            cards:
+              - show_name: true
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: light.fire_10_tablet_screen
+                name: Office
+                size: 60px
+                icon: mdi:briefcase
+              - show_name: true
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: light.bedroom_tablet_screen
+                name: Bedroom
+                size: 60px
+              - show_name: true
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: light.office_tablet_screen
+                name: Kitchen
+                size: 60px
+                icon: mdi:countertop
+              - show_name: true
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                icon: mdi:bookmark
+                name: Placeholder
+                size: 60px
+              - show_name: false
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: switch.fire_10_tablet_screensaver
+                name: Fire
+                size: 60px
+              - show_name: false
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: switch.bedroom_tablet_screensaver
+                name: Bedroom
+                size: 60px
+              - show_name: false
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                entity: switch.office_tablet_screensaver
+                name: Office
+                size: 60px
+              - show_name: false
+                show_icon: true
+                type: custom:button-card
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                icon: mdi:monitor-screenshot
+                name: Placeholder
+                size: 60px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Qbittorrent
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.qbittorrent_down_speed
+                name: Download
+            align_state: center
+            hours_to_show: 4
+            points_per_hour: 6
+            icon: mdi:arrow-down-bold
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.qbittorrent_up_speed
+                name: Upload
+            align_state: center
+            hours_to_show: 4
+            points_per_hour: 6
+            icon: mdi:arrow-up-bold
+      - type: entity
+        entity: sensor.qbittorrent_status
+        name: Torrent Status
+        card_mod:
+          style: |
+            ha-card .header .icon {
+              visibility: hidden;
+            }
+            ha-card {
+              text-align: center;
+            }
+            ha-card .header{
+              justify-content: center;
+            }
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Energy
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: horizontal-stack
+        cards:
+          - show_name: false
+            show_icon: false
+            show_state: true
+            type: custom:button-card
+            tap_action:
+              action: more-info
+            hold_action:
+              action: none
+            entity: sensor.power_sum
+            styles:
+              card:
+                - padding-top: 5px
+                - height: 70px
+                - padding-bottom: 5px
+              state:
+                - font-size: 30px
+                - font-weight: bold
+          - show_name: true
+            show_icon: false
+            type: custom:button-card
+            color_type: card
+            name: Details
+            color: var(--ha-card-background)
+            styles:
+              card:
+                - width: 80px
+                - height: 70px
+              name:
+                - font-size: 20px
+                - font-weight: bold
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Internet
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 2
+        type: grid
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.speedtest_download
+                name: Download
+            align_state: center
+            hours_to_show: 12
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.speedtest_upload
+                name: Upload
+            align_state: center
+            hours_to_show: 12
+      - type: entity
+        entity: sensor.speedtest_ping
+        card_mod:
+          style: |
+            ha-card .header .icon {
+              visibility: hidden;
+            }
+            ha-card {
+              text-align: center;
+            }
+            ha-card .header{
+              justify-content: center;
+            }
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Television
+    path: television
+    icon: mdi:television
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Television
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            entity: input_select.tv_device_selection
+            show_state: true
+            show_icon: false
+            show_name: false
+            styles:
+              card:
+                - width: 330px
+                - height: 65px
+              state:
+                - font-weight: bold
+                - font-size: 40px
+            tap_action:
+              action: call-service
+              service: input_select.select_next
+              service_data:
+                entity_id: input_select.tv_device_selection
+          - type: custom:button-card
+            entity: input_boolean.tv_helper
+            show_icon: true
+            show_name: false
+            styles:
+              card:
+                - height: 65px
+            size: 55px
+            icon: mdi:monitor-multiple
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.tv_helper
+      - type: conditional
+        conditions:
+          - entity: input_boolean.tv_helper
+            state: 'on'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - type: divider
+                  style:
+                    background-color: white
+                    height: 3px
+              style: |
+                ha-card {
+                  background: none;
+                  box-shadow: none;
+                }
+                .card-content {
+                  padding-top: 10px;
+                  padding-bottom: 0px;
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+            - type: horizontal-stack
+              cards:
+                - type: custom:button-card
+                  icon: mdi:bed
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.tv_device_selection
+                      option: Bedroom TV
+                  hold_action:
+                    action: more-info
+                  show_icon: true
+                  show_name: true
+                  entity: input_select.tv_device_selection
+                  name: Bedroom TV
+                  state:
+                    - value: Bedroom TV
+                      styles:
+                        icon:
+                          - color: var(--accent-color)
+                - type: custom:button-card
+                  icon: mdi:home-floor-b
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.tv_device_selection
+                      option: Basement TV
+                  hold_action:
+                    action: more-info
+                  show_icon: true
+                  show_name: true
+                  entity: input_select.tv_device_selection
+                  name: Basement TV
+                  state:
+                    - value: Basement TV
+                      styles:
+                        icon:
+                          - color: var(--accent-color)
+                - type: custom:button-card
+                  icon: mdi:briefcase
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: input_select.select_option
+                    service_data:
+                      entity_id: input_select.tv_device_selection
+                      option: Office TV
+                  hold_action:
+                    action: more-info
+                  show_icon: true
+                  show_name: true
+                  entity: input_select.tv_device_selection
+                  name: Office TV
+                  state:
+                    - value: Office TV
+                      styles:
+                        icon:
+                          - color: var(--accent-color)
+            - type: entities
+              entities:
+                - type: divider
+                  style:
+                    background-color: white
+                    height: 3px
+              style: |
+                ha-card {
+                  background: none;
+                  box-shadow: none;
+                }
+                .card-content {
+                  padding-top: 0px;
+                  padding-bottom: 10px;
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Apps
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: conditional
+        conditions:
+          - entity: input_select.tv_device_selection
+            state: Bedroom TV
+        card:
+          cards:
+            - cards:
+                - entity: switch.roku_tv_status
+                  hold_action:
+                    action: more-info
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: custom:button-card
+                  icon_height: 55px
+                  color_type: icon
+                  color: '#4cb05b'
+                - entity: switch.bedroom_roku_youtube_tv
+                  hold_action:
+                    action: more-info
+                  name: TV
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+                - entity: switch.bedroom_roku_plex
+                  hold_action:
+                    action: more-info
+                  name: Plex
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+              type: horizontal-stack
+            - cards:
+                - entity: switch.bedroom_roku_youtube
+                  hold_action:
+                    action: more-info
+                  name: Youtube
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+                - entity: switch.bedroom_roku_netflix
+                  hold_action:
+                    action: more-info
+                  name: Netflix
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+                - entity: switch.bedroom_roku_twitch
+                  hold_action:
+                    action: more-info
+                  name: Twitch
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+              type: horizontal-stack
+          type: custom:stack-in-card
+          mode: vertical
+      - type: conditional
+        conditions:
+          - entity: input_select.tv_device_selection
+            state: Basement TV
+        card:
+          cards:
+            - cards:
+                - entity: switch.shield_tv_status
+                  hold_action:
+                    action: more-info
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: custom:button-card
+                  icon_height: 55px
+                  color: '#4cb05b'
+                - entity: switch.shield_tv
+                  hold_action:
+                    action: more-info
+                  name: TV
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+                - entity: switch.shield_plex
+                  hold_action:
+                    action: more-info
+                  name: Plex
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: custom:button-card
+                  color: '#e5a00d'
+                  icon_height: 55px
+              type: horizontal-stack
+            - cards:
+                - entity: switch.shield_youtube
+                  hold_action:
+                    action: more-info
+                  name: Youtube
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: button
+                  icon_height: 55px
+                - entity: switch.shield_netflix
+                  hold_action:
+                    action: more-info
+                  name: Netflix
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: custom:button-card
+                  color: '#E50914'
+                  icon_height: 55px
+                - entity: switch.shield_twitch
+                  hold_action:
+                    action: more-info
+                  name: Twitch
+                  show_icon: true
+                  show_name: true
+                  tap_action:
+                    action: toggle
+                  type: custom:button-card
+                  color: '#6441a5'
+                  icon_height: 55px
+              type: horizontal-stack
+          type: custom:stack-in-card
+          mode: vertical
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Plex
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: vertical-stack
+        cards:
+          - square: false
+            columns: 3
+            type: grid
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                name: Unwatched Movie
+                icon: ''
+                entity: input_button.plex_unwatched_movie
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                name: Comedy Playlist
+                entity: input_button.plex_comedy_shows
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: input_button.plex_always_sunny
+                name: Always Sunny
+      - type: conditional
+        conditions:
+          - entity: input_select.plex_device_selection
+            state: Basement TV
+          - entity: media_player.plex_plex_for_android_tv_shield_android_tv
+            state_not: unavailable
+        card:
+          type: custom:mini-media-player
+          entity: media_player.plex_plex_for_android_tv_shield_android_tv
+          artwork: cover
+          toggle_power: false
+          hide:
+            icon: true
+            volume: true
+            source: true
+            power: true
+          scale: '1.3'
+      - type: conditional
+        conditions:
+          - entity: input_select.plex_device_selection
+            state: Bedroom TV
+          - entity: media_player.plex_plex_for_roku_master_bedroom
+            state_not: unavailable
+        card:
+          type: custom:mini-media-player
+          entity: media_player.plex_plex_for_roku_master_bedroom
+          artwork: cover
+          toggle_power: false
+          hide:
+            icon: true
+            volume: true
+            source: true
+            power: true
+          scale: '1.3'
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Music
+    path: music
+    icon: mdi:music
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        icon: mdi:plex
+        name: Spotify
+        custom_fields:
+          plexicon: |
+            [[[ return `<ha-icon
+                  icon="mdi:spotify"
+                  style="width: 40px; height: 40px;">
+                  </ha-icon>` ]]]
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 45px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+            - position: absolute
+            - left: 45%
+          custom_fields:
+            plexicon:
+              - position: absolute
+              - left: 35%
+              - color: '#1DB954'
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            entity: input_select.spotify_device
+            show_state: true
+            show_icon: false
+            show_name: false
+            styles:
+              card:
+                - width: 330px
+                - height: 65px
+              state:
+                - font-weight: bold
+                - font-size: 40px
+            tap_action:
+              action: call-service
+              service: input_select.select_next
+              service_data:
+                entity_id: input_select.spotify_device
+          - type: custom:button-card
+            entity: input_boolean.spotify_helper
+            show_icon: true
+            show_name: false
+            styles:
+              card:
+                - height: 65px
+            size: 55px
+            icon: mdi:speaker-multiple
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.spotify_helper
+      - type: conditional
+        conditions:
+          - entity: input_boolean.spotify_helper
+            state: 'on'
+        card:
+          type: vertical-stack
+          cards:
+            - type: custom:swipe-card
+              parameters:
+                spaceBetween: 8
+                slidesPerView: 1
+                scrollbar:
+                  hide: true
+                  draggable: true
+                  snapOnRelease: true
+              cards:
+                - type: vertical-stack
+                  cards:
+                    - type: custom:button-card
+                      show_icon: false
+                      show_name: true
+                      name: Devices
+                      styles:
+                        card:
+                          - background: none
+                          - box-shadow: none
+                          - height: 40px
+                          - padding-bottom: 0px
+                          - padding-top: 0px
+                        name:
+                          - font-weight: bold
+                          - font-size: 35px
+                    - type: entities
+                      entities:
+                        - type: divider
+                          style:
+                            background-color: white
+                            height: 3px
+                      style: |
+                        ha-card {
+                          background: none;
+                          box-shadow: none;
+                        }
+                        .card-content {
+                          padding-top: 10px;
+                          padding-bottom: 0px;
+                          padding-left: 0px;
+                          padding-right: 0px;
+                        }
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          icon: mdi:countertop
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Kitchen
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Kitchen
+                          state:
+                            - value: Kitchen
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:briefcase
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Office
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Office
+                          state:
+                            - value: Office
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:bed
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Bedroom
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Bedroom
+                          state:
+                            - value: Bedroom
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          icon: mdi:shower
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Bathroom
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Bathroom
+                          state:
+                            - value: Bathroom
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:speaker
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Basement
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Basement
+                          state:
+                            - value: Basement
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:flower
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Outside
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Outside
+                          state:
+                            - value: Outside
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                - type: vertical-stack
+                  cards:
+                    - type: custom:button-card
+                      show_icon: false
+                      show_name: true
+                      name: Groups
+                      styles:
+                        card:
+                          - background: none
+                          - box-shadow: none
+                          - height: 40px
+                          - padding-bottom: 0px
+                          - padding-top: 0px
+                        name:
+                          - font-weight: bold
+                          - font-size: 35px
+                    - type: entities
+                      entities:
+                        - type: divider
+                          style:
+                            background-color: white
+                            height: 3px
+                      style: |
+                        ha-card {
+                          background: none;
+                          box-shadow: none;
+                        }
+                        .card-content {
+                          padding-top: 10px;
+                          padding-bottom: 0px;
+                          padding-left: 0px;
+                          padding-right: 0px;
+                        }
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          icon: mdi:home-floor-1
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: First Floor
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: First Floor
+                          state:
+                            - value: First Floor
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:home-floor-2
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Second Floor
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Second Floor
+                          state:
+                            - value: Second Floor
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:speaker-multiple
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Everywhere
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Everywhere
+                          state:
+                            - value: Everywhere
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:button-card
+                          icon: mdi:bookmark
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Placeholder
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Placeholder
+                          state:
+                            - value: Placeholder
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:bookmark
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Placeholder
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Placeholder
+                          state:
+                            - value: Placeholder
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+                        - type: custom:button-card
+                          icon: mdi:bookmark
+                          size: 60px
+                          tap_action:
+                            action: call-service
+                            service: input_select.select_option
+                            service_data:
+                              entity_id: input_select.spotify_device
+                              option: Placeholder
+                          hold_action:
+                            action: more-info
+                          show_icon: true
+                          show_name: true
+                          entity: input_select.spotify_device
+                          name: Placeholder
+                          state:
+                            - value: Placeholder
+                              styles:
+                                icon:
+                                  - color: var(--accent-color)
+            - type: entities
+              entities:
+                - type: divider
+                  style:
+                    background-color: white
+                    height: 3px
+              style: |
+                ha-card {
+                  background: none;
+                  box-shadow: none;
+                }
+                .card-content {
+                  padding-top: 0px;
+                  padding-bottom: 10px;
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:skip-previous
+            tap_action:
+              action: call-service
+              service: media_player.media_previous_track
+              service_data:
+                entity_id: media_player.spotify_shire21
+            size: 55px
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:play-pause
+            tap_action:
+              action: call-service
+              service: script.spotify_play_help
+            size: 55px
+            state:
+              - operator: template
+                value: |
+                  [[[
+                    if (states['media_player.spotify_shire21'].attributes.source == states['input_select.spotify_device'].state && states['media_player.spotify_shire21'].state == 'playing')
+                      return true;
+                    else
+                      return false;
+                  ]]]
+                icon: mdi:pause
+              - operator: default
+                icon: mdi:play
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            icon: mdi:skip-next
+            tap_action:
+              action: call-service
+              service: media_player.media_next_track
+              service_data:
+                entity_id: media_player.spotify_shire21
+            size: 55px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: call-service
+              service: script.spotify_volume_down
+            icon: mdi:volume-minus
+            size: 55px
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: call-service
+              service: script.spotify_volume_up
+            icon: mdi:volume-plus
+            size: 55px
+          - show_name: false
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            icon: ''
+            entity: input_boolean.spotify_playlist_helper
+            size: 55px
+      - type: conditional
+        conditions:
+          - entity: input_boolean.spotify_playlist_helper
+            state: 'on'
+        card:
+          type: vertical-stack
+          cards:
+            - type: entities
+              entities:
+                - type: divider
+                  style:
+                    background-color: white
+                    height: 3px
+              style: |
+                ha-card {
+                  background: none;
+                  box-shadow: none;
+                }
+                .card-content {
+                  padding-top: 10px;
+                  padding-bottom: 0px;
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+            - type: horizontal-stack
+              cards:
+                - type: custom:button-card
+                  icon: mdi:heart
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: media_player.play_media
+                    data:
+                      media_content_type: playlist
+                      media_content_id: >-
+                        https://open.spotify.com/playlist/37i9dQZF1DXbTxeAdrVG2l?si=e190d8c6b6844a4f
+                    target:
+                      entity_id: media_player.spotify_shire21
+                  show_icon: true
+                  show_name: true
+                  name: Liked Songs
+                - type: custom:button-card
+                  icon: mdi:numeric-9-box
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: script.spotify_playlist_helper
+                    service_data:
+                      playlistName: spotify:playlist:37i9dQZF1DXbTxeAdrVG2l
+                  show_icon: true
+                  show_name: true
+                  name: 90s
+                - type: custom:button-card
+                  icon: mdi:music-box
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: script.spotify_playlist_helper
+                    service_data:
+                      playlistName: spotify:playlist:3ZJgbUEIeQNyfzNNKjzyRu
+                  show_icon: true
+                  show_name: true
+                  name: Night
+            - type: horizontal-stack
+              cards:
+                - type: custom:button-card
+                  icon: mdi:dumbbell
+                  size: 60px
+                  tap_action:
+                    action: call-service
+                    service: script.spotify_playlist_helper
+                    service_data:
+                      playlistName: spotify:playlist:2fVYSq2CJLEHwescwhC0ta
+                  show_icon: true
+                  show_name: true
+                  name: Workout
+                - type: custom:button-card
+                  icon: mdi:bookmark
+                  size: 60px
+                  show_icon: true
+                  show_name: true
+                  name: Placeholder
+                - type: custom:button-card
+                  icon: mdi:bookmark
+                  size: 60px
+                  show_icon: true
+                  show_name: true
+                  name: Placeholder
+            - type: entities
+              entities:
+                - type: divider
+                  style:
+                    background-color: white
+                    height: 3px
+              style: |
+                ha-card {
+                  background: none;
+                  box-shadow: none;
+                }
+                .card-content {
+                  padding-top: 0px;
+                  padding-bottom: 10px;
+                  padding-left: 0px;
+                  padding-right: 0px;
+                }
+      - type: custom:mini-media-player
+        entity: media_player.spotify_shire21
+        volume_step: '5'
+        hide:
+          power: true
+          name: true
+          progress: true
+          source: true
+          info: true
+          controls: true
+          icon: true
+        style: |
+          ha-card .mmp-player {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+          }
+      - type: custom:stack-in-card
+        cards:
+          - show_name: false
+            show_icon: false
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: sensor.spotify_song_title
+            show_state: true
+            styles:
+              card:
+                - padding-bottom: 0px
+                - padding-left: 10px
+                - padding-right: 10px
+              state:
+                - font-size: 30px
+                - font-weight: bold
+          - show_name: false
+            show_icon: false
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: sensor.spotify_artist_name
+            show_state: true
+            styles:
+              card:
+                - padding-top: 0px
+              state:
+                - font-size: 20px
+      - type: custom:mini-media-player
+        entity: media_player.spotify_shire21
+        artwork: full-cover
+        hide:
+          icon: true
+          info: true
+          power: true
+          controls: true
+          name: true
+          volume: true
+          source: true
+        style: |
+          ha-card {
+            height: 360px;
+          }
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Shopping
+    path: shopping
+    icon: mdi:cart
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Shopping List
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 45px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: shopping-list
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Cameras
+    path: cameras
+    icon: mdi:cctv
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Cameras
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 45px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: navigate
+              navigation_path: /ccab4aaf_frigate-proxy/dashboard
+            name: Frigate
+            icon: mdi:cctv
+            hold_action:
+              action: none
+            icon_height: 50px
+          - type: entity
+            entity: sensor.front_person_count
+            icon: mdi:account
+            name: ' '
+            unit: People
+          - type: entity
+            name: ' '
+            icon: mdi:car
+            entity: sensor.front_car_count
+            unit: Cars
+      - type: custom:frigate-card
+        cameras:
+          - camera_entity: camera.front_doorbell_main
+            live_provider: auto
+        live:
+          preload: true
+          lazy_load: false
+          draggable: false
+        view:
+          default: live
+        menu:
+          buttons:
+            frigate:
+              enabled: false
+            live:
+              enabled: false
+            clips:
+              enabled: false
+            snapshots:
+              enabled: false
+            download:
+              enabled: false
+            frigate_ui:
+              enabled: false
+            fullscreen:
+              enabled: false
+            media_player:
+              enabled: false
+          style: overlay
+          position: right
+        dimensions:
+          aspect_ratio_mode: static
+          aspect_ratio: '4:3'
+      - type: custom:frigate-card
+        cameras:
+          - camera_entity: camera.front_person
+        menu:
+          style: none
+        live:
+          preload: true
+          draggable: false
+          lazy_unload: never
+        view:
+          timeout_seconds: 0
+          update_seconds: 0
+      - show_name: false
+        show_icon: false
+        type: custom:button-card
+        tap_action:
+          action: toggle
+        entity: sensor.front_person_count
+        show_last_changed: true
+      - type: custom:frigate-card
+        cameras:
+          - camera_entity: camera.front
+        view:
+          default: snapshots
+          dark_mode: 'off'
+        event_gallery:
+          controls:
+            thumbnails:
+              show_details: true
+              show_favorite_control: false
+              show_timeline_control: false
+              size: 170
+        dimensions:
+          aspect_ratio: '10:15'
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Automations
+    path: automations
+    icon: mdi:robot
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Automations
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 45px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - show_icon: false
+        type: custom:button-card
+        tap_action:
+          action: toggle
+        name: Guest Mode
+        color_type: card
+        icon: mdi:account-group
+        icon_height: 60px
+        entity: input_boolean.guest_mode
+        show_state: true
+        styles:
+          name:
+            - font-size: 25px
+          state:
+            - font-size: 20px
+          card:
+            - height: 70px
+      - type: entities
+        entities:
+          - entity: automation.open_garage_on_arrival
+          - entity: automation.close_garage_on_depart
+          - entity: automation.garage_close_night
+          - entity: automation.lights_off_when_leaving
+        title: Arrive/Depart
+      - type: entities
+        entities:
+          - entity: automation.alexa_action_garage_door_ask
+          - entity: automation.alexa_action_garage_door_exe
+          - entity: automation.alexa_action_spotify_work_start_ask
+          - entity: automation.alexa_action_spotify_work_start_exe
+        title: Alexa Action
+      - type: entities
+        entities:
+          - entity: automation.play_spotify_on_office
+          - entity: automation.spotify_helper_reset
+          - entity: automation.spotify_playlist_helper_reset
+          - entity: automation.spotify_refresher
+        title: Spotify
+      - type: entities
+        entities:
+          - entity: automation.notify_front_door_presence
+            icon: mdi:doorbell
+          - entity: automation.compilation_garage_toggle
+          - entity: automation.feedreader_test
+          - entity: automation.ipad_battery_update
+          - entity: automation.medication_reminder
+          - entity: automation.medication_trigger
+          - entity: automation.laundry_done_dryer
+          - entity: automation.laundry_done_washer
+          - entity: automation.twitch_launch_jericho
+        title: Notifications
+      - type: entities
+        entities:
+          - entity: automation.bedroom_tv_application
+          - entity: automation.plex_lights
+          - entity: automation.plex_play_item
+          - entity: automation.tv_helper_reset
+        title: Television
+      - type: entities
+        entities:
+          - entity: automation.good_morning
+          - entity: automation.goodnight
+          - entity: automation.nightly_reset
+          - entity: automation.office_test
+          - entity: automation.office_test_off
+          - entity: automation.tablet_screensaver_sync
+        title: Other
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: System
+    path: system
+    icon: mdi:server
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: System
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: more-info
+            entity: input_boolean.mike_at_home
+            hold_action:
+              action: toggle
+            size: 50px
+            name: Mike
+            theme: noctis_mod
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: more-info
+            entity: input_boolean.ken_at_home
+            hold_action:
+              action: toggle
+            size: 50px
+            name: Placeholder
+          - show_name: true
+            show_icon: true
+            type: custom:button-card
+            tap_action:
+              action: toggle
+            entity: input_boolean.medication_taken
+            size: 50px
+            name: Medication
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Updates
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: entities
+        entities:
+          - entity: binary_sensor.home_assistant_website_update_available
+            name: New HA Version
+          - entity: sensor.hacs
+          - entity: update.frigate_nvr_proxy_update
+        show_header_toggle: false
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Resources
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - type: entity
+            entity: sensor.processor_use
+            name: Processor
+          - type: entity
+            entity: sensor.memory_use_percent
+            name: Memory
+          - type: entity
+            entity: sensor.disk_use_percent
+            name: Disk Use
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Devices
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            show_state: true
+            entity: sensor.mike_battery_level
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.mikes_ipad_pro_battery_level
+            show_state: true
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.quest_battery_level
+            show_state: true
+            icon_height: 30px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Sensors
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.lumi_lumi_weather_power
+            show_state: true
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.bedroom_temp_sensor_power
+            show_state: true
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.lumi_lumi_sensor_magnet_aq2_power
+            show_state: true
+            icon_height: 30px
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.lumi_lumi_sensor_magnet_aq2_battery
+            show_state: true
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.lumi_lumi_sensor_magnet_aq2_power
+            show_state: true
+            icon_height: 30px
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: more-info
+            entity: sensor.ups_battery_charge
+            show_state: true
+            icon_height: 30px
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Other
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 60px
+            - padding-bottom: 0px
+            - padding-top: 15px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: entities
+        entities:
+          - entity: person.mike
+          - entity: sensor.mike_iphone_room_presence
+      - type: custom:mod-card
+        style: |
+          .card-content {
+            padding: 0
+          }
+          :host {
+            z-index: 999;
+            position: sticky;
+            position: -webkit-sticky;
+            bottom: 0;
+          }
+        card:
+          show_name: true
+          show_icon: true
+          type: custom:button-card
+          tap_action:
+            action: navigate
+            navigation_path: home
+          icon: mdi:home
+          size: 50px
+          color_type: card
+          color: '#242e42'
+          styles:
+            card:
+              - box-shadow: none
+  - theme: Backend-selected
+    title: Unused
+    path: unused
+    badges: []
+    cards:
+      - type: custom:button-card
+        show_icon: false
+        show_name: true
+        name: Speed Test
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+            - height: 45px
+            - padding-bottom: 0px
+            - padding-top: 0px
+          name:
+            - font-weight: bold
+            - font-size: 35px
+      - type: custom:bar-card
+        entities:
+          - entity: sensor.speedtest_download
+            max: '600'
+            target: '450'
+            name: Download
+            severity:
+              - color: '#e25822'
+                from: '0'
+                to: '200'
+              - color: '#858C3E'
+                from: '200'
+                to: '300'
+              - color: '#47ba66'
+                from: '300'
+                to: '600'
+          - entity: sensor.speedtest_upload
+            target: '25'
+            name: Upload
+            severity:
+              - color: '#e25822'
+                from: '0'
+                to: '10'
+              - color: '#858C3E'
+                from: '10'
+                to: '20'
+              - color: '#47ba66'
+                from: '20'
+                to: '40'
+            max: '35'
+          - entity: sensor.speedtest_ping
+            target: '25'
+            max: '100'
+            name: Ping
+            severity:
+              - from: '0'
+                to: '30'
+                color: '#47ba66'
+              - from: '30'
+                to: '100'
+                color: '#e25822'
+        positions:
+          icon: inside
+          title: Internet Speed
+      - type: custom:vertical-stack-in-card
+        cards:
+          - show_name: false
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: cover.garage_door_opener
+            icon_height: 100px
+            name: Main Garage
+            style: |
+              ha-card.type-button {
+                padding-top: 0px;
+                padding-bottom: 0px;
+              }
+          - type: entity
+            entity: cover.garage_door_opener
+            style: |
+              ha-card .header {
+                visibility: hidden;
+                height: 0px;
+              }
+              ha-card {
+                text-align: center;
+                font-weight: bold;
+              }
+              ha-card.type-entity {
+                margin-bottom: -20px;
+              }
+          - show_name: true
+            show_icon: false
+            name: Last Changed
+            type: custom:button-card
+            entity: cover.garage_door_opener
+            show_last_changed: true
+            styles:
+              label:
+                - font-size: 30px
