@@ -3554,8 +3554,8 @@ views:
             - font-size: 35px
       - type: entities
         entities:
-          - entity: person.mike
           - entity: sensor.mike_iphone_room_presence
+            name: Mike Current Room
       - type: custom:mod-card
         style: |
           .card-content {
